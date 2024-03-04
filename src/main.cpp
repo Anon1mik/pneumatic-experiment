@@ -15,7 +15,6 @@
 
 ERA_filter<float> potFilter(0.1); // Фильтр
 char value;
-// Перевёрнутое значение с тумблеров
 // Тумблеры
 bool switchState11 = 0;
 bool switchState12 = 0;
