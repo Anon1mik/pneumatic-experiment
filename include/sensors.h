@@ -1,28 +1,29 @@
-#pragma once
+#pragma once 
 
-#include "pinmap.h"
-#include "DFilters.h"
-#include "switchstate.h"
-
+// Функция для получения угла бедра
 int getAngleHip(){
-  static ERA_filter<float> _era(0.1); // Фильтр
-  return _era.filtered(analogRead(PIN_ANGLE_HIP));
+  static ERA_filter<float> _era(0.1); // Создаём статический фильтр с коэффициентом 0.1
+  return _era.filtered(analogRead(PIN_ANGLE_HIP)); // Возвращаем отфильтрованное значение угла бедра
 }
 
-int getAngleHip1(){
-  static ERA_filter<float> _era1(0.1); // Фильтр
-  return _era1.filtered(analogRead(PIN_ANGLE_KNEE));
+// Функция для получения угла колена
+int getAngleKnee(){
+  static ERA_filter<float> _era1(0.1); // Создаём фильтр с коэффициентом 0.1
+  return _era1.filtered(analogRead(PIN_ANGLE_KNEE)); // Возвращаем отфильтрованное значение угла колена
 }
 
-SwitchLibrary mySwitch11(PIN_SWITCH11);
-SwitchLibrary mySwitch12(PIN_SWITCH12);
-SwitchLibrary mySwitch21(PIN_SWITCH21);
-SwitchLibrary mySwitch22(PIN_SWITCH22);
+// Создаём объекты класса Debounce для работы с переключателями
+DebounceButton SwitchLeftUp(PIN_SWITCH_LEFT_UP);
+DebounceButton SwitchLeftDown(PIN_SWITCH_LEFT_DOWN);
+DebounceButton SwitchRightUp(PIN_SWITCH_RIGHT_UP);
+DebounceButton SwitchRightDown(PIN_SWITCH_RIGHT_DOWN);
 
-// Первый тумблер, в нижнем положении 1, в верхнем 2, в среднем 0
-int TUMBLER_ONE() { 
-  bool switchState1 = mySwitch11.getSwitchState();
-  bool switchState2 = mySwitch12.getSwitchState();
+// Функция для определения положения первого тумблера
+// В нижнем положении возвращает 1, в верхнем - 2, в среднем - 0
+int TUMBLER_ONE() {
+  bool switchState1 = SwitchLeftUp.getSwitchState(); // Получаем состояние первого переключателя тумблера
+  bool switchState2 = SwitchLeftDown.getSwitchState(); // Получаем состояние второго переключателя тумблера
+
   if (switchState1 == 1){
     return 1;
   }
@@ -32,10 +33,12 @@ int TUMBLER_ONE() {
   return 0;
 }
 
-// Второй тумблер, в нижнем положении 1, в верхнем 2, в среднем 0
+// Функция для определения положения второго тумблера
+// В нижнем положении возвращает 1, в верхнем - 2, в среднем - 0
 int TUMBLER_TWO(){
-  bool switchState1 = mySwitch21.getSwitchState();
-  bool switchState2 = mySwitch22.getSwitchState();
+  bool switchState1 = SwitchRightUp.getSwitchState(); // Получаем состояние первого переключателя тумблера
+  bool switchState2 = SwitchRightDown.getSwitchState(); // Получаем состояние второго переключателя тумблера
+
   if (switchState1 == 1){
     return 2;
   }
