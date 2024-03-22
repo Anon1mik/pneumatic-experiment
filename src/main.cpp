@@ -1,16 +1,20 @@
 #include "Arduino.h"
-#include "pinmap.h"
+
 #include "DFilters.h"
+#include "DTimer.h"
+
+#include "pinmap.h"
 #include "debounce.h"
 #include "sensors.h"
-#include "comport.h"
+#include "control.h"
+#include "data.h"
 
 void setup(){
   Serial.begin(9600); 
-  initPins();
+  setupPins();
 }
 
 void loop(){
-  // Вывод значений в порт
-com();
+  printData();
+  pneumaticCulyndr();
 }
