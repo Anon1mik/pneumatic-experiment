@@ -7,7 +7,9 @@ void printData() {
      Serial.print(","); // Вывод разделителя
      Serial.print(getAngleHip()); // Вывод значения переключателя 1 в последовательный порт
      Serial.print(",");
-     Serial.print(pila(5,5));
+     Serial.print(pila(60.0,100,1100));
+     Serial.print(","); // Вывод разделителя
+     Serial.print(sinus(2,500,0,2000));
      Serial.print(","); // Вывод разделителя
      Serial.print(buttonState);
      Serial.print(",");
