@@ -2,6 +2,7 @@
 
 #include "DFilters.h"
 #include "DTimer.h"
+#include "DPolynomial.h"
 
 #include "pinmap.h"
 #include "debounce.h"
@@ -17,4 +18,5 @@ void setup(){
 void loop(){
   printData();
   pneumaticCulyndr();
+  polinom();
 }

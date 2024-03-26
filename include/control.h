@@ -1,5 +1,6 @@
 #pragma once
 
+
 unsigned long prevMillis = 0;
 const unsigned long interval = 1;
 
@@ -35,15 +36,31 @@ int pila(const float FREQUENCY, const int MIN_VALUE, const int MAX_VALUE) {
 
 // Функция для генерации синусоидальной волны
 
-int sinus(int frequency, int amplitude, int min_value, int max_value) {
-   for (float i = 0; i < 360; i += 1) {
-    static float Sine1 = 100 * sin(i * M_PI / 180);
-    return Sine1;
-}
-}
-void polinom()
+ void polinom()
 {
 
+Polynomial_3 polynomial_3;
+static unsigned long _loop_timer = 0; // Время в микросекундах
+static unsigned long _delta_timer = 0; // Период цикла в микросекундах
+static unsigned long _plan_time = 0.0; // Плановое время
+const unsigned long _takeoff_time = 4 * 1000000; // Продолжительность раскрутки винтов
+static int _status = 0;
+_delta_timer = micros() - _loop_timer;
+_loop_timer = micros();
+
+_plan_time += _delta_timer;
+if(_plan_time < _takeoff_time && _status == 0) polynomial_3.calcCoef(0, 1100, 0, 0 , 0, _takeoff_time);
+else if(_plan_time >= _takeoff_time && _status == 0) {
+  _status = 1;
+  _plan_time = 0;
+}
+if ( _plan_time < _takeoff_time && _status == 1) polynomial_3.calcCoef(1100, 0, 0, 0 , 0, _takeoff_time);
+else if( _plan_time >= _takeoff_time && _status == 1){
+   _plan_time = 0;
+   _status = 0; 
+}
+double result = polynomial_3.getPosition(_plan_time);
+Serial.println(result);
 }
 
 // Функция управления пневматическими цилиндрами в зависимости от положения тумблеров
