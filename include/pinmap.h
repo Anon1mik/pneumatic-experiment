@@ -20,7 +20,7 @@
 void setupPins(){
   pinMode(PIN_CYLIN_KNEE2, OUTPUT); // Инициализация пина цилиндра бедра
   pinMode(PIN_CYLIN_KNEE1, OUTPUT); // Инициализация пина цилиндра бедра
-  pinMode(PIN_CYLIN_LEG2, OUTPUT); // Инициализация пина цилиндра бедра
-  pinMode(PIN_CYLIN_LEG1, OUTPUT); // Инициализация пина цилиндра бедра
-  pinMode(BUTTON, INPUT); // Кнопка переключения статуса
+  pinMode(PIN_CYLIN_LEG2, OUTPUT);  // Инициализация пина цилиндра бедра
+  pinMode(PIN_CYLIN_LEG1, OUTPUT);  // Инициализация пина цилиндра бедра
+  pinMode(BUTTON, INPUT);           // Кнопка переключения статуса c ручного управления 
 }

@@ -17,7 +17,7 @@ int getSaw(float _freq, float _amp, float _down_position)
 { //          Частота,разброс волны, нижняя позиция.
   // Например:    5.0        100.0         50.0
 
-  static float _value;  // Значение, которое мы будем выводить
+  static float _value;  // Переменная для расчёта
   static int _vect = 1; // Переменная для определения движения волны
 
   // Таймер
@@ -58,18 +58,20 @@ int polinom3(unsigned long _up_time, int _amp, int _downPosition)
   // Создание объекта полинома
   Polynomial_3 polynomial_3;
 
-  // Переменная для отработки полинома ровно один раз
-  static int _last_state = -1;   
+  static int _last_state = -1;   // Переменная для отработки полинома ровно один раз
+
+const int _uppper_position = _downPosition + _amp; // верхняя позиция
+
   // Логика направления полинома
   if (_last_state == -1)
   {
     if (pneumo_state == PS_LEG_UP)
     {
-      polynomial_3.calculate(_downPosition, _downPosition + _amp, _up_time / 2);
+      polynomial_3.calculate(_downPosition, _uppper_position, _up_time);
       _last_state = 1;
     }
     else if (pneumo_state == PS_LEG_DOWN) {
-        polynomial_3.calculate(_downPosition + _amp, _downPosition, _up_time);
+        polynomial_3.calculate(_uppper_position, _downPosition, _up_time);
        _last_state = 1;
     }
   } 
@@ -119,7 +121,7 @@ void KneeSTOP(){
 void pneumaticCulyndr()
 {
   // Управление цилиндром левой ноги в зависимости от положения левого тумблера
-if (buttonState == 0){
+if  (buttonState == 0){
   if      (getTumblerLeft() == 2) LegUP();
   else if (getTumblerLeft() == 1) LegDOWN();
   else                            LegSTOP();

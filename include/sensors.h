@@ -13,9 +13,9 @@ int getAngleKnee(){
 }
 
 // Создаём объекты класса Debounce для работы с переключателями
-DebounceButton SwitchLeftUp(PIN_SWITCH_LEFT_UP);
-DebounceButton SwitchLeftDown(PIN_SWITCH_LEFT_DOWN);
-DebounceButton SwitchRightUp(PIN_SWITCH_RIGHT_UP);
+DebounceButton SwitchLeftUp   (PIN_SWITCH_LEFT_UP);
+DebounceButton SwitchLeftDown (PIN_SWITCH_LEFT_DOWN);
+DebounceButton SwitchRightUp  (PIN_SWITCH_RIGHT_UP);
 DebounceButton SwitchRightDown(PIN_SWITCH_RIGHT_DOWN);
 
 bool buttonState = digitalRead(BUTTON);
