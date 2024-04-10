@@ -12,9 +12,9 @@ enum PNEUMO_STATES
 PNEUMO_STATES pneumo_state = PS_LEG_UP;
 
 // Функция для генерации пилообразной волны
-// Принимает на вход частоту, минимальное и максимальное значения.
-int getSaw(float _freq, float _amp, float _midle)
-{ //          Частота,разброс волны, центр волны.
+// Принимает на вход частоту, амплитуду, нижнию позицию
+int getSaw(float _freq, float _amp, float _down_position)
+{ //          Частота,разброс волны, нижняя позиция.
   // Например:    5.0        100.0         50.0
 
   static float _value;  // Значение, которое мы будем выводить
@@ -28,11 +28,11 @@ int getSaw(float _freq, float _amp, float _midle)
   // Переменная, которая увеличивается или уменьшается относительно времени
   _time += ((float)_delta_timer * _vect) / 1000.0;
   // Формула построения графика
-  _value = 2.8 * _amp * _time * _freq + _midle;
+  _value = 2.8 * _amp * _time * _freq + _down_position;
   // Логика направления графика
-  if (_value > _amp + _midle)
+  if (_value > _amp + _down_position)
     _vect = -1;
-  else if (_value < _midle - (_amp / 2))
+  else if (_value < _down_position)
     _vect = 1;
 
   return _value;
@@ -40,15 +40,16 @@ int getSaw(float _freq, float _amp, float _midle)
 // Функция для генерации синуса
 int sinus(float _freqsin, float _amp, int _down_position)
 {
+  // Таймер
   static unsigned long _loop_timer1;
   unsigned long _delta_timer = millis() - _loop_timer1;
   _loop_timer1 = millis();
-
   static float _time;
   _time += (float)_delta_timer / 1000.0;
-  float _output_pos_lhr = _down_position + _amp * sin(6.28 * _time * _freqsin);
 
-  return (int)_output_pos_lhr;
+  float _output = _down_position + _amp * sin(6.28 * _time * _freqsin); // Расчёт позиции 
+
+  return (int)_output;
 }
 
 // Функция для генерации полинома волны
@@ -69,7 +70,7 @@ int polinom3(unsigned long _up_time, int _amp, int _downPosition)
     }
     else if (pneumo_state == PS_LEG_DOWN) {
         polynomial_3.calculate(_downPosition + _amp, _downPosition, _up_time);
-      _last_state = 1;
+       _last_state = 1;
     }
   } 
 // Переменная для отправки значения в функцию
