@@ -9,6 +9,7 @@
 #include "sensors.h"
 #include "control.h"
 #include "data.h"
+#include "regulator.h"
 
 void setup(){
   Serial.begin(9600); 
