@@ -46,90 +46,96 @@ int sinus(float _freqsin, float _amp, int _down_position)
   _loop_timer1 = millis();
   static float _time;
   _time += (float)_delta_timer / 1000.0;
+  
 
-  float _output = _down_position + _amp * sin(6.28 * _time * _freqsin); // Расчёт позиции 
+  float _output = _down_position + _amp * sin(6.28 * _time * _freqsin); // Расчёт позиции
 
   return (int)_output;
 }
-
 // Функция для генерации полинома волны
-int polinom3(unsigned long _up_time, int _amp, int _downPosition)
+int polinom3(unsigned long _up_time, int _downPosition, int _upperPosition)
 {
   // Создание объекта полинома
-  Polynomial_3 polynomial_3;
-
-  static int _last_state = -1;   // Переменная для отработки полинома ровно один раз
-
-const int _uppper_position = _downPosition + _amp; // верхняя позиция
-
-  // Логика направления полинома
-  if (_last_state == -1)
+  Polynomial_3 poly3;
+  static int state = 0;
+    static int error;
+  if (state == 0)
   {
-    if (pneumo_state == PS_LEG_UP)
+    poly3.calculate(_downPosition, _upperPosition, _up_time);
+    state = 1;
+  }
+  if (state == 1)
+  {
+    if (poly3.isFinished() == 1)
     {
-      polynomial_3.calculate(_downPosition, _uppper_position, _up_time);
-      _last_state = 1;
+      poly3.calculate(_upperPosition, _downPosition, _up_time);
+      state = 2;
     }
-    else if (pneumo_state == PS_LEG_DOWN) {
-        polynomial_3.calculate(_uppper_position, _downPosition, _up_time);
-       _last_state = 1;
-    }
-  } 
-// Переменная для отправки значения в функцию
-  static int _poly_value = polynomial_3.getPosition();
-  
-  // Логика расчёта верхней и нижней позиции
-  if (_poly_value > _downPosition + _amp)
-  {
-    pneumo_state = PS_LEG_DOWN;
-    _last_state = -1;
   }
-  else if(_poly_value < _downPosition){
-    pneumo_state = PS_LEG_UP;
-    _last_state = -1;
+  else if (state == 2)
+  {
+    if (poly3.isFinished() == 1)
+    {
+      poly3.calculate(_downPosition, _upperPosition, _up_time);
+      state = 1;
+    }
   }
 
-  return _poly_value;
+  error = getAngleHip() - poly3.getPosition();
+
+  return error;
 }
 // Функция управления пневматическими цилиндрами в зависимости от положения тумблеров
 
-void LegUP(){
-    digitalWrite(PIN_CYLIN_LEG2, HIGH);
-    digitalWrite(PIN_CYLIN_LEG1, LOW);
+void LegUP()
+{
+  digitalWrite(PIN_CYLIN_LEG2, HIGH);
+  digitalWrite(PIN_CYLIN_LEG1, LOW);
 }
-void LegDOWN(){
-    digitalWrite(PIN_CYLIN_LEG2, LOW);
-    digitalWrite(PIN_CYLIN_LEG1, HIGH); 
+void LegDOWN()
+{
+  digitalWrite(PIN_CYLIN_LEG2, LOW);
+  digitalWrite(PIN_CYLIN_LEG1, HIGH);
 }
-void LegSTOP(){
-    digitalWrite(PIN_CYLIN_LEG2, LOW);
-    digitalWrite(PIN_CYLIN_LEG1, LOW);
+void LegSTOP()
+{
+  digitalWrite(PIN_CYLIN_LEG2, LOW);
+  digitalWrite(PIN_CYLIN_LEG1, LOW);
 }
-void KneeUP(){
-    digitalWrite(PIN_CYLIN_KNEE2, HIGH);
-    digitalWrite(PIN_CYLIN_KNEE1, LOW);
+void KneeUP()
+{
+  digitalWrite(PIN_CYLIN_KNEE2, HIGH);
+  digitalWrite(PIN_CYLIN_KNEE1, LOW);
 }
-void KneeDOWN(){
-    digitalWrite(PIN_CYLIN_KNEE2, LOW);
-    digitalWrite(PIN_CYLIN_KNEE1, HIGH);
+void KneeDOWN()
+{
+  digitalWrite(PIN_CYLIN_KNEE2, LOW);
+  digitalWrite(PIN_CYLIN_KNEE1, HIGH);
 }
-void KneeSTOP(){
-    digitalWrite(PIN_CYLIN_KNEE2, LOW);
-    digitalWrite(PIN_CYLIN_KNEE1, LOW);
+void KneeSTOP()
+{
+  digitalWrite(PIN_CYLIN_KNEE2, LOW);
+  digitalWrite(PIN_CYLIN_KNEE1, LOW);
 }
 // Ручное управление, если кнопка не нажата
 void pneumaticCulyndr()
 {
   // Управление цилиндром левой ноги в зависимости от положения левого тумблера
-if  (buttonState == 0){
-  if      (getTumblerLeft() == 2) LegUP();
-  else if (getTumblerLeft() == 1) LegDOWN();
-  else                            LegSTOP();
+  if (buttonState == 0)
+  {
+    if (getTumblerLeft() == 2)
+      LegUP();
+    else if (getTumblerLeft() == 1)
+      LegDOWN();
+    else
+      LegSTOP();
 
-
-  // Управление цилиндром правого колена в зависимости от положения правого тумблера
-  if      (getTumlerRight() == 2) KneeUP();
-  else if (getTumlerRight() == 1) KneeDOWN();
-  else                            KneeSTOP();
-}
+    // Управление цилиндром правого колена в зависимости от положения правого тумблера
+    if (getTumlerRight() == 2)
+      KneeUP();
+    else if (getTumlerRight() == 1)
+      KneeDOWN();
+    else
+      KneeSTOP();
+  }
 }

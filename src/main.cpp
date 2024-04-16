@@ -9,7 +9,7 @@
 #include "sensors.h"
 #include "control.h"
 #include "data.h"
-#include "regulator.h"
+#include "drive.h"
 
 void setup(){
   Serial.begin(9600); 
@@ -19,5 +19,4 @@ void setup(){
 void loop(){
   printData();
   pneumaticCulyndr();
-  regulatorHip();
 }
