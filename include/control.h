@@ -56,86 +56,56 @@ int sinus(float _freqsin, float _amp, int _down_position)
 int polinom3(unsigned long _up_time, int _downPosition, int _upperPosition)
 {
   // Создание объекта полинома
-  Polynomial_3 poly3;
-  static int state = 0;
-    static int error;
-  if (state == 0)
-  {
-    poly3.calculate(_downPosition, _upperPosition, _up_time);
+  Polynomial_3 _polynomial;
+  static int state = 0; // Переменная для направления графика
+
+    // 1-е действие, выполняется при запуске МК
+  if (state == 0){
+    _polynomial.calculate(_downPosition, _upperPosition, _up_time);
     state = 1;
   }
-  if (state == 1)
-  {
-    if (poly3.isFinished() == 1)
+  // 1-й цикл, спуск
+  if (state == 1){
+    if (_polynomial.isFinished() == 1)
     {
-      poly3.calculate(_upperPosition, _downPosition, _up_time);
+      _polynomial.calculate(_upperPosition, _downPosition, _up_time);
       state = 2;
     }
   }
-  else if (state == 2)
-  {
-    if (poly3.isFinished() == 1)
+  // 2-й цикл, подъем 
+  else if (state == 2){
+    if (_polynomial.isFinished() == 1)
     {
-      poly3.calculate(_downPosition, _upperPosition, _up_time);
+      _polynomial.calculate(_downPosition, _upperPosition, _up_time);
       state = 1;
     }
   }
-
-  error = getAngleHip() - poly3.getPosition();
-
-  return error;
+  // Возвращаем ошибку в функцию
+  return _polynomial.getPosition();
 }
 // Функция управления пневматическими цилиндрами в зависимости от положения тумблеров
 
-void LegUP()
-{
+void LegUP(){
   digitalWrite(PIN_CYLIN_LEG2, HIGH);
   digitalWrite(PIN_CYLIN_LEG1, LOW);
 }
-void LegDOWN()
-{
+void LegDOWN(){
   digitalWrite(PIN_CYLIN_LEG2, LOW);
   digitalWrite(PIN_CYLIN_LEG1, HIGH);
 }
-void LegSTOP()
-{
+void LegSTOP(){
   digitalWrite(PIN_CYLIN_LEG2, LOW);
   digitalWrite(PIN_CYLIN_LEG1, LOW);
 }
-void KneeUP()
-{
+void KneeUP(){
   digitalWrite(PIN_CYLIN_KNEE2, HIGH);
   digitalWrite(PIN_CYLIN_KNEE1, LOW);
 }
-void KneeDOWN()
-{
+void KneeDOWN(){
   digitalWrite(PIN_CYLIN_KNEE2, LOW);
   digitalWrite(PIN_CYLIN_KNEE1, HIGH);
 }
-void KneeSTOP()
-{
+void KneeSTOP(){
   digitalWrite(PIN_CYLIN_KNEE2, LOW);
   digitalWrite(PIN_CYLIN_KNEE1, LOW);
-}
-// Ручное управление, если кнопка не нажата
-void pneumaticCulyndr()
-{
-  // Управление цилиндром левой ноги в зависимости от положения левого тумблера
-  if (buttonState == 0)
-  {
-    if (getTumblerLeft() == 2)
-      LegUP();
-    else if (getTumblerLeft() == 1)
-      LegDOWN();
-    else
-      LegSTOP();
-
-    // Управление цилиндром правого колена в зависимости от положения правого тумблера
-    if (getTumlerRight() == 2)
-      KneeUP();
-    else if (getTumlerRight() == 1)
-      KneeDOWN();
-    else
-      KneeSTOP();
-  }
 }
