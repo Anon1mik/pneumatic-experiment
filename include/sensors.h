@@ -30,7 +30,7 @@ int getTumblerLeft() {
 
 // Функция для определения положения второго тумблера
 // В нижнем положении возвращает 1, в верхнем - 2, в среднем - 0
-int getTumlerRight(){
+int getTumblerRight(){
   if      (SwitchRightDown.getSwitchState()) return 2; // если нижняя кнопка включена, возвращаем 1
   else if (SwitchRightUp.getSwitchState())   return 1; // если верхняя кнопка включена, возвращаем 2
   else                                       return 0; // если обе кнопки выдают 0, то возвращаем 0
