@@ -1,5 +1,7 @@
 #pragma once 
 
+#include "Arduino.h"
+
 // Класс для работы с тумблером (с защитой от дребезга)
 class DebounceButton{
     public:

@@ -1,13 +1,12 @@
 #include "Arduino.h"
 
 #include "DFilters.h"
-#include "DTimer.h"
 #include "DPolynomial.h"
+#include "debounce.h"
 
 #include "pinmap.h"
-#include "debounce.h"
 #include "sensors.h"
-#include "control.h"
+#include "trajectories.h"
 #include "data.h"
 #include "drive.h"
 
@@ -18,12 +17,13 @@ void setup(){
 
 void loop(){
   // // Если кнопка нажата, переводим систему в ручной режим
-  // if(buttonState) manualControl();
-  // // Иначе используем автоматическое управление
-  // else{     
+  if(buttonState()) manualControl();
+   // Иначе используем автоматическое управление
+   else{
   //   // Перемещение приводов согласно полиному 3-го порядка   
-  //   regulatorHip(20); 
-  //   regulatorKnee(20);
-  // }
-  // printData(); // Отправка данных
+     regulatorHip(); 
+     regulatorKnee();
+  }
+   printData(); // Отправка данных
+   Serial.println(poly3);
 }
