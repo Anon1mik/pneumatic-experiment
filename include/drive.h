@@ -30,7 +30,8 @@ void kneeStop(){
 
 // Регуляция состояния бедра хуя
 // *** в отчетe
-void regulatorHip(){
+int regulatorHip(){
+
     const int _deathZone = 20;
     poly3 = polinom3(9000, 100, 920);
     static int _error; // Ошибка позиционирования
@@ -42,8 +43,9 @@ void regulatorHip(){
     if (_error > _deathZone)           moveHipDown();
     else if (_error < _deathZone * -1) moveHipUp();
     else                               HipStop();
+    return poly3;
 }
-void regulatorKnee(){
+int regulatorKnee(){
     const int  _deathZone = 20;
     static int _error; // Ошибка позиционирования
 
@@ -54,6 +56,8 @@ void regulatorKnee(){
     if (_error > _deathZone)           moveKneeDown();
     else if (_error < _deathZone * -1) moveKneeUp();
     else                               kneeStop();
+
+    return poly3;
 }
 
 // Ручное управление

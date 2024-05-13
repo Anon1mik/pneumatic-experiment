@@ -69,3 +69,31 @@ float polinom3(unsigned long _up_time, int _down_position, int _upper_position){
   // Возвращаем ошибку в функцию
   return _polynomial.getPosition();
 }
+float polinom31(unsigned long _up_time, int _down_position, int _upper_position){
+  // Создание объекта полинома
+  Polynomial_3 _polynomial31;
+  static int _state = 0; // Переменная для направления графика
+
+    // 1-е действие, выполняется при запуске функции
+  if (_state == 0){
+    _polynomial31.calculate(_down_position, _upper_position, _up_time);
+    _state = 1;
+  }
+  // 1-й цикл, спуск
+  if (_state == 1){
+    if (_polynomial31.isFinished()){
+      _polynomial31.calculate(_upper_position, _down_position, _up_time);
+      _state = 2;
+    }
+  }
+  // 2-й цикл, подъем 
+  else if (_state == 2){
+    if (_polynomial31.isFinished()){
+      _polynomial31.calculate(_down_position, _upper_position, _up_time);
+      _state = 1;
+    }
+  }
+  // Возвращаем ошибку в функцию
+  return _polynomial31.getPosition();
+}
+

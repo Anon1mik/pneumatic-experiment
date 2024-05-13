@@ -7,8 +7,8 @@
 #include "pinmap.h"
 #include "sensors.h"
 #include "trajectories.h"
-#include "data.h"
 #include "drive.h"
+#include "data.h"
 
 void setup(){
   Serial.begin(9600); 
@@ -21,9 +21,8 @@ void loop(){
    // Иначе используем автоматическое управление
    else{
   //   // Перемещение приводов согласно полиному 3-го порядка   
-     regulatorHip(); 
-     regulatorKnee();
+    //  regulatorHip(); 
+    //  regulatorKnee();
   }
    printData(); // Отправка данных
-   Serial.println(poly3);
 }
